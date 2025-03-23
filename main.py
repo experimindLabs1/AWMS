@@ -27,9 +27,19 @@ app.add_middleware(
 )
 
 # Firebase Init
-cred = credentials.Certificate("/home/swap/Documents/AWMS/mqtt-backend/firebase-credentials.json")
-firebase_admin.initialize_app(cred)
-db = firestore.client()
+def initialize_firebase():
+    if os.getenv('FIREBASE_CREDENTIALS'):
+        # For production: use environment variable
+        cred_dict = json.loads(os.getenv('FIREBASE_CREDENTIALS'))
+        cred = credentials.Certificate(cred_dict)
+    else:
+        # For local development: use JSON file
+        cred = credentials.Certificate("firebase-credentials.json")
+    
+    firebase_admin.initialize_app(cred)
+    return firestore.client()
+
+db = initialize_firebase()
 
 # Add this after Firebase initialization
 try:
