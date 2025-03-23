@@ -1,0 +1,11 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pip install -r requirements.txt"
+
+[deploy]
+startCommand = "python main.py"
+restartPolicyType = "always"
+
+[service]
+healthcheckPath = "/"
+healthcheckTimeout = 100
